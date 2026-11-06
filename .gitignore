@@ -1,0 +1,20 @@
+# Node modules (Dependencies)
+node_modules/
+
+# SQLite Database files (jangan diupload, dibuat otomatis)
+*.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Uploaded files
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db

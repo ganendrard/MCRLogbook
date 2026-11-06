@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCR Nusantara TV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Login Form Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="login-box glass-panel">
+            <div class="logo-box">
+                <i class="fa-solid fa-satellite-dish"></i>
+            </div>
+            <h2>MCR Nusantara TV</h2>
+            <p>Silahkan login terlebih dahulu</p>
+
+            <form id="login-form" class="login-form">
+                <div id="login-error" class="login-error hidden"></div>
+                <div class="input-group username-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" placeholder="Masukkan username" title="Username" required>
+                </div>
+                <div class="input-group password-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Masukkan password" title="Password"
+                        required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Masuk Sekarang
+                </button>
+            </form>
+
+            <div class="login-separator">
+                <span>atau</span>
+            </div>
+
+            <button class="btn-guest-login" onclick="loginAsGuest()">
+                <i class="fa-solid fa-eye"></i>
+                Masuk sebagai Guest (Read-Only)
+            </button>
+        </div>
+    </div>
+
+    <div class="app-container" id="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-box">
+                    <i class="fa-solid fa-satellite-dish"></i>
+                </div>
+                <h2>MCR NTV</h2>
+            </div>
+            <ul class="nav-links" id="main-nav">
+                <li class="active" data-target="dashboard" data-nav="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li data-target="incidents" data-nav="incidents">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Incidents</span>
+                </li>
+                <li data-target="schedules" data-nav="schedules">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Daily Schedule</span>
+                </li>
+                <li data-target="dangdut" data-nav="dangdut">
+                    <i class="fa-solid fa-music"></i>
+                    <span>Playlist Dangdut</span>
+                </li>
+                <li data-target="requests" data-nav="requests">
+                    <i class="fa-solid fa-rectangle-ad"></i>
+                    <span>Titipan</span>
+                </li>
+                <li data-target="breaking-news" data-nav="breaking-news">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Breaking News</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="header-title">
+                    <h1 id="header-title">MCR Nusantara TV</h1>
+                </div>
+                <div class="user-info">
+                    <span class="pulse-dot"></span>
+                    <span class="status-text" id="role-display">
+                        System Online
+                    </span>
+                    <button class="btn-logout" onclick="logout()" title="Ganti Divisi / Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-sections">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="view-section active">
+                    <div class="cards-container">
+                        <!-- Card Incidents -->
+                        <div class="stat-card interactive-card border-warning" id="card-nav-incidents"
+                            data-target="incidents">
+                            <div class="stat-icon icon-warning">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Incidents</h3>
+                                <p id="stat-incidents">0</p>
+                                <span class="card-action-text">
+                                    Lihat & Laporkan
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Card Titipan -->
+                        <div class="stat-card interactive-card border-info" id="stat-requests-card"
+                            data-target="requests">
+                            <div class="stat-icon icon-info">
+                                <i class="fa-solid fa-envelope-open-text"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Unread Titipan</h3>
+                                <p id="stat-requests">0</p>
+                                <span class="card-action-text">
+                                    Buka Titipan
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Card Breaking News -->
+                        <div class="stat-card interactive-card border-danger" id="card-nav-breaking"
+                            data-target="breaking-news">
+                            <div class="stat-icon icon-danger">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Breaking News</h3>
+                                <p class="card-text-highlight text-danger">
+                                    Broadcast Baru
+                                </p>
+                                <span class="card-action-text">
+                                    Laporkan Siaran Sela
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Card Daily Schedule -->
+                        <div class="stat-card interactive-card border-success" id="card-nav-schedules"
+                            data-target="schedules">
+                            <div class="stat-icon icon-success">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Daily Schedule</h3>
+                                <p class="card-text-highlight text-success">
+                                    Grid Jadwal
+                                </p>
+                                <span class="card-action-text">
+                                    Buka Jadwal
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Card Playlist Dangdut -->
+                        <div class="stat-card interactive-card border-music" id="card-nav-dangdut"
+                            data-target="dangdut">
+                            <div class="stat-icon icon-music">
+                                <i class="fa-solid fa-music"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Playlist Dangdut</h3>
+                                <p class="card-text-highlight text-music">
+                                    Daftar Lagu
+                                </p>
+                                <span class="card-action-text">
+                                    Buka Playlist
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-container">
+                        <div class="section-title">
+                            <h2>
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                Chronological Log
+                            </h2>
+                        </div>
+                        <div id="timeline-log" class="timeline">
+                            <!-- Timeline items injected here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Incidents Section -->
+                <section id="incidents" class="view-section hidden">
+                    <div class="glass-panel">
+                        <h2>Log Technical Incident</h2>
+                        <form id="form-incident" class="form-grid">
+                            <div class="input-group">
+                                <label for="incident-date">Tanggal Kejadian</label>
+                                <input type="date" id="incident-date" name="incident_date"
+                                    placeholder="Tanggal Kejadian" title="Tanggal Kejadian" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="incident-time">Waktu Kejadian (Time)</label>
+                                <input type="time" id="incident-time" name="incident_time" placeholder="Waktu Kejadian"
+                                    title="Waktu Kejadian (Time)" required>
+                            </div>
+                            <div class="input-group full-width">
+                                <label for="incident-category">Kategori</label>
+                                <select id="incident-category" name="category" title="Kategori" required>
+                                    <option value="Audio">Audio Issue (Hilang/Kecil)</option>
+                                    <option value="Video">Video Format Error</option>
+                                    <option value="Signal">Signal Down / Black Screen</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group full-width">
+                                <label for="incident-description">Description</label>
+                                <textarea id="incident-description" name="description" rows="3"
+                                    placeholder="Deskripsi kejadian..." title="Description" required></textarea>
+                            </div>
+                            <div class="input-group full-width">
+                                <label for="incident-evidence">Upload Bukti (Opsional - Foto/Video)</label>
+                                <input type="file" id="incident-evidence" name="evidence" accept="image/*,video/*"
+                                    title="Upload Bukti">
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                Submit Incident
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel">
+                        <h2>Riwayat Insiden (History)</h2>
+                        <div class="table-container">
+                            <table id="incidents-table" class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hari & Waktu Kejadian</th>
+                                        <th>Kategori</th>
+                                        <th>Deskripsi Kejadian</th>
+                                        <th>Bukti (Evidence)</th>
+                                        <th>Tanggal Input</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Schedules Section -->
+                <section id="schedules" class="view-section hidden">
+                    <div class="glass-panel">
+                        <div class="header-action">
+                            <h2>
+                                Daily/Weekly Schedule Grid 
+                                <span id="schedule-active-period-text">
+                                </span>
+                            </h2>
+                            <div class="export-buttons">
+                                <a 
+                                    href="/api/export/schedules/excel" 
+                                    class="btn-secondary"
+                                    id="btn-export-excel">
+                                    <i class="fa-solid fa-file-excel"></i>
+                                    Export Excel
+                                </a>
+                                <a 
+                                    href="/api/export/schedules/pdf" 
+                                    class="btn-secondary"
+                                    id="btn-export-pdf">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    Export PDF
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Filter & New Period Section -->
+                        <div class="schedule-filter-row">
+                            <div class="period-tabs-group">
+                                <label class="period-tabs-label">
+                                    <i class="fa-solid fa-calendar-week"></i>
+                                    Pilih Periode Jadwal
+                                </label>
+                                <div 
+                                    class="period-tabs-wrapper" 
+                                    id="period-tabs-wrapper">
+                                    <div 
+                                        class="period-tabs-scroll" 
+                                        id="period-tabs-scroll">
+                                        <!-- Populated via JS -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div 
+                                class="new-period-btn-container" 
+                                id="new-period-btn-container">
+                                <button 
+                                    type="button" 
+                                    class="btn-secondary" 
+                                    id="btn-toggle-new-period">
+                                    <i class="fa-solid fa-calendar-plus"></i>
+                                    Buat Periode Baru
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Form Inline for New Period -->
+                        <div 
+                            class="new-period-form-container hidden" 
+                            id="new-period-form-container">
+                            <div class="new-period-form glass-panel">
+                                <h3>Buat Periode Baru</h3>
+                                <div class="form-grid-inline">
+                                    <div class="input-group">
+                                        <label for="new-period-start">
+                                            Tanggal Mulai (Senin)
+                                        </label>
+                                        <input 
+                                            type="date" 
+                                            id="new-period-start">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="new-period-end">
+                                            Tanggal Selesai (Minggu)
+                                        </label>
+                                        <input 
+                                            type="date" 
+                                            id="new-period-end">
+                                    </div>
+                                    <div class="new-period-actions">
+                                        <button 
+                                            type="button" 
+                                            class="btn-primary" 
+                                            id="btn-save-new-period">
+                                            Simpan
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            class="btn-secondary" 
+                                            id="btn-cancel-new-period">
+                                            Batal
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form to add schedule -->
+                        <div class="schedule-form-container">
+                            <form id="form-schedule" class="form-grid compact-form">
+                                <div class="input-group full-width">
+                                    <label>Hari Tayang (Bisa pilih beberapa)</label>
+                                    <div class="days-checkbox-grid">
+                                        <label class="day-checkbox">
+                                            <input type="checkbox" name="days" value="Senin" title="Senin">
+                                            <span>Senin</span>
+                                        </label>
+                                        <label class="day-checkbox">
+                                            <input type="checkbox" name="days" value="Selasa" title="Selasa">
+                                            <span>Selasa</span>
+                                        </label>
+                                        <label class="day-checkbox">
+                                            <input type="checkbox" name="days" value="Rabu" title="Rabu">
+                                            <span>Rabu</span>
+                                        </label>
+                                        <label class="day-checkbox">
+                                            <input type="checkbox" name="days" value="Kamis" title="Kamis">
+                                            <span>Kamis</span>
+                                        </label>
+                                        <label class="day-checkbox">
+                                            <input type="checkbox" name="days" value="Jumat" title="Jumat">
+                                            <span>Jumat</span>
+                                        </label>
+                                        <label class="day-checkbox">
+                                            <input type="checkbox" name="days" value="Sabtu" title="Sabtu">
+                                            <span>Sabtu</span>
+                                        </label>
+                                        <label class="day-checkbox">
+                                            <input type="checkbox" name="days" value="Minggu" title="Minggu">
+                                            <span>Minggu</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="sched-start-time">Jam Mulai</label>
+                                    <input type="time" id="sched-start-time" name="start_time" placeholder="Jam Mulai"
+                                        title="Jam Mulai" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="sched-end-time">Jam Selesai</label>
+                                    <input type="time" id="sched-end-time" name="end_time" placeholder="Jam Selesai"
+                                        title="Jam Selesai" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="sched-program-name">Nama Program</label>
+                                    <input type="text" id="sched-program-name" name="program_name"
+                                        placeholder="Misal: NTV SPORT" title="Nama Program" required>
+                                </div>
+                                <div class="input-group" id="group-rating">
+                                    <label for="sched-rating">Rating (Opsional)</label>
+                                    <select id="sched-rating" name="rating" title="Rating (Opsional)">
+                                        <option value="">-</option>
+                                        <option value="SU">SU</option>
+                                        <option value="BO">BO</option>
+                                        <option value="R">R</option>
+                                    </select>
+                                </div>
+                                <div class="input-group" id="group-material">
+                                    <label for="sched-material">Material (Opsional)</label>
+                                    <select id="sched-material" name="material_type" title="Material (Opsional)">
+                                        <option value="">-</option>
+                                        <option value="Fresh">Fresh</option>
+                                        <option value="Rerun">Rerun</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="select-broadcast-type">Tipe Siaran (Opsional)</label>
+                                    <select name="broadcast_type" id="select-broadcast-type"
+                                        title="Tipe Siaran (Opsional)">
+                                        <option value="">-</option>
+                                        <option value="Taping">Taping (Rekaman)</option>
+                                        <option value="Live">Live</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group full-width checkbox-group">
+                                    <label class="custom-checkbox program-replacement">
+                                        <input type="checkbox" name="is_replacement" id="is_replacement"
+                                            title="Tandai sebagai Program Pengganti">
+                                        <span class="checkmark"></span>
+                                        Tandai sebagai Program Pengganti (Warna Biru)
+                                    </label>
+                                    <label class="custom-checkbox program-new">
+                                        <input type="checkbox" name="is_new" id="is_new"
+                                            title="Tandai sebagai Program Baru">
+                                        <span class="checkmark"></span>
+                                        Tandai sebagai Program Baru (Warna Kuning)
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn-primary full-width-btn">
+                                    Tambahkan ke Grid Jadwal
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Schedule Grid View -->
+                        <div class="schedule-grid-container">
+                            <div class="schedule-legend">
+                                <span class="legend-item"><span class="color-box box-blue"></span> Program
+                                    Pengganti</span>
+                                <span class="legend-item"><span class="color-box box-yellow"></span> Program Baru</span>
+                                <span class="legend-item"><span class="color-box box-normal"></span> Program
+                                    Reguler</span>
+                            </div>
+                            <div class="grid-scroll">
+                                <table class="weekly-grid" id="weekly-grid-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="time-col">Jam</th>
+                                            <th>Senin</th>
+                                            <th>Selasa</th>
+                                            <th>Rabu</th>
+                                            <th>Kamis</th>
+                                            <th>Jumat</th>
+                                            <th class="weekend">Sabtu</th>
+                                            <th class="weekend">Minggu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Injected via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Requests Section -->
+                <section id="requests" class="view-section hidden">
+                    <div class="glass-panel" id="request-form-container">
+                        <h2>Input Titipan Khusus</h2>
+                        <form id="form-request" class="form-grid">
+                            <div class="input-group">
+                                <label for="req-target-date">Target Tanggal (Wajib)</label>
+                                <input type="date" id="req-target-date" name="target_date" placeholder="Target Tanggal"
+                                    title="Target Tanggal" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="req-target-time">Target Rentang Jam (Opsional)</label>
+                                <input type="text" id="req-target-time" name="target_time"
+                                    placeholder="Contoh: 14:00 - 15:00 / Pagi Hari"
+                                    title="Target Rentang Jam (Opsional)">
+                            </div>
+                            <div class="input-group">
+                                <label for="req-type">Jenis Titipan</label>
+                                <select id="req-type" name="request_type" title="Jenis Titipan" required>
+                                    <option value="Iklan Commercial">Iklan Commercial</option>
+                                    <option value="Superimpose">Superimpose (Grafis)</option>
+                                    <option value="Videotron">Videotron</option>
+                                    <option value="Promo">Promo Materi</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="req-details">Detail (Keterangan)</label>
+                                <textarea id="req-details" name="details" rows="2"
+                                    placeholder="Deskripsi titipan secara detail..." title="Detail Keterangan"
+                                    required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                Kirim Titipan
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel">
+                        <h2>Daftar Titipan Aktif</h2>
+                        <div class="table-container">
+                            <table id="requests-table" class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Target Waktu</th>
+                                        <th>Jenis Titipan</th>
+                                        <th>Detail Keterangan</th>
+                                        <th>Dibuat Pada</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Breaking News Section -->
+                <section id="breaking-news" class="view-section hidden">
+                    <div class="glass-panel alert-panel">
+                        <h2>
+                            <i class="fa-solid fa-tower-broadcast"></i>
+                            Input Breaking News
+                        </h2>
+                        <form id="form-breaking-news" class="form-grid">
+                            <div class="input-group">
+                                <label for="bn-date">Hari & Tanggal Tayang</label>
+                                <input type="date" id="bn-date" name="broadcast_date"
+                                    placeholder="Hari & Tanggal Tayang" title="Hari & Tanggal Tayang" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="bn-time">Jam Tayang (WIB)</label>
+                                <input type="time" id="bn-time" name="broadcast_time" placeholder="Jam Tayang"
+                                    title="Jam Tayang" required>
+                            </div>
+                            <div class="input-group full-width">
+                                <label for="bn-content">Isi Detail Breaking News</label>
+                                <textarea id="bn-content" name="content" rows="4"
+                                    placeholder="Tuliskan materi/isi dari Breaking News secara lengkap..."
+                                    title="Isi Detail Breaking News" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-danger" id="btn-submit-bn">
+                                Broadcast Breaking News
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel" id="breaking-news-history-panel">
+                        <h2>Riwayat Breaking News (History)</h2>
+                        <div class="table-container">
+                            <table id="breaking-news-table" class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal & Waktu Siar</th>
+                                        <th>Materi Breaking News</th>
+                                        <th>Tanggal Input</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Soundcore Dangdut Section -->
+                <section id="dangdut" class="view-section hidden">
+                    <div class="glass-panel" id="dangdut-form-container">
+                        <h2>Input Playlist Soundcore Dangdut</h2>
+                        <form id="form-dangdut" class="form-grid">
+                            <div class="input-group">
+                                <label for="dangdut-date">Pilih Tanggal</label>
+                                <input 
+                                    type="date" 
+                                    id="dangdut-date" 
+                                    name="playlist_date" 
+                                    title="Pilih Tanggal" 
+                                    required>
+                            </div>
+                            <div class="input-group">
+                                <label for="dangdut-time">Pilih Slot Waktu</label>
+                                <select 
+                                    id="dangdut-time" 
+                                    name="time_slot" 
+                                    title="Pilih Slot Waktu" 
+                                    required>
+                                    <option value="14:00 - 15:00">
+                                        14:00 - 15:00 WIB
+                                    </option>
+                                    <option value="00:30 - 01:30">
+                                        00:30 - 01:30 WIB
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="input-group full-width">
+                                <label for="dangdut-songs">
+                                    Daftar Lagu (Format Wajib: Kode Video - Judul - Artis - Durasi)
+                                </label>
+                                <textarea id="dangdut-songs" name="song_list" rows="8"
+                                    placeholder="Contoh Pengisian:&#10;1. PGSOD00001 - Goyang Nasi Padang - Duo Anggrek - 03:00&#10;2. PGSOD00002 - Lagi Syantik - Siti Badriah - 03:45&#10;... (Masukkan 10-15 lagu)"
+                                    title="Daftar Lagu" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                Simpan Playlist Dangdut
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel">
+                        <h2>Daftar Putar Soundcore Dangdut Aktif</h2>
+                        
+                        <div class="dangdut-filter-row">
+                            <div class="input-group">
+                                <label for="dangdut-view-date">
+                                    Pilih Tanggal Playlist
+                                </label>
+                                <input 
+                                    type="date" 
+                                    id="dangdut-view-date" 
+                                    title="Pilih Tanggal Playlist" 
+                                    class="date-filter-input">
+                            </div>
+                            <div 
+                                class="dangdut-view-day-display" 
+                                id="dangdut-view-day-display">
+                                Hari: -
+                            </div>
+                        </div>
+
+                        <div class="dangdut-slots-container">
+                            <div class="dangdut-slot-card">
+                                <div class="slot-header">
+                                    <i class="fa-solid fa-clock"></i> 
+                                    Jam 14:00 - 15:00 WIB
+                                </div>
+                                <div class="slot-content" id="slot-content-14">
+                                    <p class="timeline-empty-message">
+                                        Belum ada playlist.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="dangdut-slot-card">
+                                <div class="slot-header">
+                                    <i class="fa-solid fa-clock"></i> 
+                                    Jam 00:30 - 01:30 WIB
+                                </div>
+                                <div class="slot-content" id="slot-content-00">
+                                    <p class="timeline-empty-message">
+                                        Belum ada playlist.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel" id="dangdut-history-panel">
+                        <h2>Jadwal Playlist Dangdut Terinput</h2>
+                        <div class="table-container">
+                            <table 
+                                id="dangdut-history-table" 
+                                class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal & Hari</th>
+                                        <th>Slot Waktu</th>
+                                        <th>Preview Playlist</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div 
+                            class="pagination-container" 
+                            id="dangdut-pagination">
+                            <button 
+                                class="btn-pagination" 
+                                id="dangdut-prev-btn" 
+                                onclick="changeDangdutPage(-1)"
+                                title="Halaman Sebelumnya">
+                                <i class="fa-solid fa-chevron-left"></i> 
+                                Prev
+                            </button>
+                            <span 
+                                class="pagination-info" 
+                                id="dangdut-page-info">
+                                Halaman 1 dari 1
+                            </span>
+                            <button 
+                                class="btn-pagination" 
+                                id="dangdut-next-btn" 
+                                onclick="changeDangdutPage(1)"
+                                title="Halaman Selanjutnya">
+                                Next 
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
