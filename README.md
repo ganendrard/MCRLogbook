@@ -2,7 +2,8 @@
 
 A web-based logbook management system for Master Control Room (MCR) operations, built to streamline daily broadcasting workflows at a TV station.
 
-**Live Demo →** `mcrlogbook-production.up.railway.app`
+**Live Demo →** `mcrlogbook-production.up.railway.app`  
+**Figma Prototype →** [View Wireframe](https://www.figma.com/proto/SCiJ0frl3dHwWcjXYVkCG8/MCR-Logbook-Wireframe-Sederhana?node-id=4-11&starting-point-node-id=4%3A11&t=TejXdYpNHhg5Mkb1-1)
 
 ---
 
